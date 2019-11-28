@@ -1,0 +1,12 @@
+export const appConfig = {
+    API_URL: 'http://localhost:5000',
+    LOGIN_USER: 'LOGIN_USER',
+    IS_LOGIN: 'IS_LOGIN',
+    IS_LOGOUT: 'IS_LOGOUT',
+    FETCH_STAFF: 'FETCH_STAFF',
+    ADD_STAFF: 'ADD_STAFF',
+    GET_ONE_STAFF: 'GET_ONE_STAFF',
+    DELETE_STAFF: 'DELETE_STAFF',
+    INSERT_STAFF: 'INSERT_STAFF',
+    UPDATE_STAFF: 'UPDATE_STAFF'
+};
