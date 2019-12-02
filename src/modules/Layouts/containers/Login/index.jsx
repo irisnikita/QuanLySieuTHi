@@ -29,6 +29,7 @@ class Login extends Component {
     onSubmit = event => {
         event.preventDefault();
         this.authUser();
+        
     };
 
     authUser = async () => {
@@ -43,16 +44,16 @@ class Login extends Component {
         })
 
         if (getUserInfo) {
-            this.props.onLoginUser({
-                isAuth: true
-            })
-            
-            // if (getUserInfo.data.passwordUser === this.state.passwordUser) {
-            //     // localStorage.setItem('userlogin',JSON.stringify(getUserInfo.data))
-
-            // } else {
-            //     alert('Bạn đã nhập sai mật khẩu');
-            // }
+            if(getUserInfo.data.passwordUser === this.state.passwordUser){
+                this.props.onLoginUser({
+                    isAuth: true,
+                    user : getUserInfo.data
+                })
+                localStorage.setItem('userlogin',JSON.stringify(getUserInfo.data))
+            }
+            else{
+                alert('sai ten dang nhap hay nhap lai')
+            }
         }
     }
 
@@ -123,6 +124,7 @@ class Login extends Component {
 const mapStateToProps = state => {
     return {
         user: state.Layouts.loginReducer.user,
+        isAuth: state.Layouts.loginReducer.isAuth
     };
 };
 

@@ -1,9 +1,10 @@
 // Routes
 import homepage from './routes/homepage';
 import staff from './routes/staff';
+import nhacungcap from './routes/nhacungcap'
 
 
-let routes = [].concat(homepage, staff);
+let routes = [].concat(homepage, staff,nhacungcap);
 
 // Convert nested routes to simple routes
 const convertNestedRoutes = (routes) => {

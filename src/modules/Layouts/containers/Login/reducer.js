@@ -8,11 +8,19 @@ const initialState = {
 
 const loginReducer = (state = initialState, action) => {
     switch (action.type) {
-        case types.UPDATE_LOGIN: {
+        case types.ON_LOGIN_USER: {
             return {
                 ...state,
-                isAuth: action.payload.isAuth || false
+                isAuth: action.payload.isAuth || false,
+                user : action.payload.user
             };
+        }
+        case types.ON_LOGOUT_USER:{
+            return {
+                ...state,
+                isAuth: action.payload.isAuth ,
+                user : action.payload.user
+            }
         }
         default:
             return state;

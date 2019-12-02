@@ -9,6 +9,8 @@ export default [
         name: 'Staff',
         exact: true,
         component: Staff,
-        resources: []
+        resources: [
+            
+        ]
     }
 ];

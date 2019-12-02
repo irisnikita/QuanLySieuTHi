@@ -9,8 +9,6 @@ import store from './store';
 // Components
 import Layouts from './modules/Layouts';
 
-// Assets
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   render() {
