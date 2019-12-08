@@ -1,0 +1,40 @@
+.row input{
+    border-radius: 20px;
+}
+.mt-27{
+    margin-top: 27px;
+}
+
+.width-100{
+    width: 100px;
+}
+.row .marign-modal-1{
+    margin: 20vh 30vh;
+     border-radius: 20px;
+     padding: 20px;
+}
+.dropdown-machucvu{
+    padding: 5px ;
+    border-radius: 3px;
+    width: 242px;
+    box-shadow: 0px 0px 14px -7px rgba(207,207,207,1);
+    display: flex;
+    top: 72px;
+    flex-direction: column;
+    position: absolute;
+    background: #ffffff;
+    cursor: pointer;
+}
+.item-dropdown{
+    padding: 5px 5px;
+    border-bottom: 1px solid #979797;
+    font-weight: 500;
+}
+.item-dropdown:hover{
+    background: #bebebe;
+    color: #ffffff;
+}
+.hover-color:hover{
+    color: rgb(209, 209, 209);
+    cursor: pointer;
+}

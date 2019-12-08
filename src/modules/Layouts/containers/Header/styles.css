@@ -6,6 +6,7 @@
 }
 
 .avatar {
+    transition: all 200ms;
     width: 40px;
     height: 40px;
     background: #999999;
@@ -16,15 +17,73 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
+    color: #ffffff;
     margin: 0 10px;
     transition: all 200ms;
 }
-.user:hover{
+.user-info:hover{
     color: #4adfdf;
     font-size: 15px;
+   
+}
+.user-info:hover .avatar{
+   opacity: 0;
+}
+.user-info:hover  .dropdown-user{
+    height: 130px;
 }
 .fixed{
 }
 .mr-10{
     margin-right: 10px;
+}
+.dropdown-user{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 0px;
+    overflow: hidden;
+    width: 120px;
+    top: 32px;
+    right: -20px;
+    transition: all 200ms;
+}
+.dropdown-user:hover{
+    height: 130px;
+}
+
+.avatar-big{
+    transition: all 200ms;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 5px solid #ffffff;
+
+}
+.name-user{
+    cursor: pointer;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 1px solid #999999;
+    padding: 2px 10px;
+    border-radius: 10px;
+}.name-user:hover{
+    color: #999999;
+}
+.name-user:active{
+    color: #6eda9e;
+}
+.position-fixed{
+    position: fixed;
+    width: 100%;
+    height: 10vh;
+    z-index: 2;
+}
+.btn{
+    margin: 0 2px;
+}
+.btn-hover:hover{
+    color: black;
 }

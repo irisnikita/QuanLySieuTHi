@@ -18,7 +18,8 @@ class ListStaff extends Component {
     constructor(props) {
         super(props);
         this.state={
-            search : ''
+            search : '',
+            isloading: 'false'
         }
     }
     
@@ -40,9 +41,20 @@ class ListStaff extends Component {
     componentDidUpdate() {}
 
     showStaffs = () => {
-
+        const {search = ''} = this.state;
         const { staffs } = this.props;
-        return staffs.map((staff, index) => <Staff staff={staff} index={index} key={index} />);
+       
+            return staffs.map((staff, index) => {
+                const {tennv = ''} = staff;
+
+                if (tennv.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                    return <Staff staff={staff} index={index} key={index} />
+                }
+
+                return null;
+            });
+        
+        
     
     };
 
@@ -58,6 +70,7 @@ class ListStaff extends Component {
     }
 
     getStaffs = async () => {
+        this.setState({isloading: true})
         const getStaffs = await axios({
             method: 'GET',
             url: `${appConfig.API_URL}/staffs/`,
@@ -65,11 +78,16 @@ class ListStaff extends Component {
         });
 
         if (getStaffs) {
+            this.setState({isloading:false})
             this.props.onGetAllStaff({
                 staffs: getStaffs.data,
             });
         }
     };
+
+    showLoading=()=>{
+        
+    }
 
     search=()=>{
         var n =-1;
@@ -86,7 +104,9 @@ class ListStaff extends Component {
         return (
             <React.Fragment>
                 <div>
-                    <h2 style={{ margin: '0 0 20px 0' }}>Quản lý nhân viên</h2>
+                    <h2 style={{ margin: '20px 0 20px 0' }}>
+                        <i className="fas fa-users    " style={{marginRight:10,color:'#00b3b3'}}></i>
+                        Quản lý nhân viên</h2>
 
                     <EditStaff />
                     <form className='form-inline' style={{ marginBottom: '20px' }}>
@@ -134,10 +154,14 @@ class ListStaff extends Component {
                                 </thead>
                             </table>
                         </div>
-
+                        
+                        {this.state.isloading?<div className="loader"/>:""}
                         <div className='table100-body js-pscroll table-staff'>
                             <table>
-                                <tbody>{this.showStaffs()}</tbody>
+                                <tbody>
+                                    {this.state.isloading?null:this.showStaffs()}
+                                    
+                                </tbody>
                             </table>
                         </div>
                     </div>

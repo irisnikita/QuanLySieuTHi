@@ -3,7 +3,8 @@ import {combineReducers} from 'redux';
 
 const initialState = {
     isAuth: false,
-    user: {}
+    user: {},
+    onToggle: false
 };
 
 const loginReducer = (state = initialState, action) => {
@@ -20,6 +21,12 @@ const loginReducer = (state = initialState, action) => {
                 ...state,
                 isAuth: action.payload.isAuth ,
                 user : action.payload.user
+            }
+        }
+        case types.ON_TOGGLE_BAR: {
+            return {
+                ...state,
+                onToggle :!state.onToggle
             }
         }
         default:

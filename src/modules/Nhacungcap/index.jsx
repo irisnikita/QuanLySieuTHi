@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 
+//assets
+import './style.css';
+
 //component
-import Lisstncc from './components/Listncc'
+import Listncc from './components/Listncc';
 
 class NhaCungCap extends Component {
-    render() {
-        return (
-            <>
-            <Lisstncc />
+	render() {
+		return (
+			<>
+				<Listncc />
 
-            </>
-        );
-    }
+			</>
+		);
+	}
 }
 
 export default NhaCungCap;

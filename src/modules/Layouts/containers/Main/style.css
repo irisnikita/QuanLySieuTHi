@@ -1,4 +1,71 @@
 .relative-layout{
     position: relative;
     top: 64px;
+    max-height: 90vh;
+    overflow: hidden;
+    transition: all 200ms;
+}
+.nav-link:hover{
+    background: #6dd7e6;
+}
+.wrapper-main{
+    display: flex;
+}
+.wrapper-main .side-bar{
+    transition: all 400ms;
+    width: 200px;
+    overflow: hidden;
+    height: 100vh;
+    background: #62b7cc;
+    position: relative;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+}
+.background-color{
+    position: absolute;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+    padding-top: 10px;
+    color: #ffffff;
+}
+.avatar-home{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+.name-home{
+    border-radius: 10px;
+    border: 1px solid #bdbdbd;
+    padding: 5px 20px;
+    margin: 20px 0px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.name-home:hover{
+    color: rgb(255, 255, 255);
+}
+.content-sidebar{
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.item-list{
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+    color: #999999;
+    
+}
+.item-list:hover{
+    background: #d6d6d6;
 }

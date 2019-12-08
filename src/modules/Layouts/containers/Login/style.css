@@ -21,7 +21,7 @@
   }
   
   .background {
-    background: url(../../../../assets/image/back-ground-login.jpg);
+    background:linear-gradient(41deg, rgba(56,139,166,1) 0%, rgba(181,26,182,1) 100%);
     background-size: cover;
   }
   

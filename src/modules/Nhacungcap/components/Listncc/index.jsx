@@ -15,10 +15,11 @@ import Ncc from '../Ncc'
 //assets
 import '../../../Staff/components/liststaff/style.css'
 
-class Lisstncc extends Component {
+class Listncc extends Component {
     constructor(props) {
         super(props);
         this.state={
+            search:''
         }
     }
     
@@ -56,10 +57,28 @@ class Lisstncc extends Component {
         }
     };
 
+    onChangeSearch=(e)=>{
+        this.setState({
+            search: e.target.value
+        })
+    }
+
     onShowNcc = () => {
 
         const { listncc } = this.props;
-        console.log(listncc)
+        const { search = ''}=this.state;
+        
+        return listncc.map((ncc,index)=>{
+                const {tenncc = ''}=ncc;
+                if(tenncc.toLowerCase().indexOf(search.toLowerCase())>-1){
+                    return <Ncc ncc={ncc} index={index} key={index} />
+                }
+                else{
+                    return null
+                }
+                
+            })
+        
     
     };
 
@@ -67,8 +86,10 @@ class Lisstncc extends Component {
         return (
             <div>
                 <div>
-                    <h2 style={{ margin: '0 0 20px 0' }}>Quản lý nhà cung cấp</h2>
-
+                    <h2 style={{ margin: '20px 0 20px 0' }}>
+                        
+                    <i className="fas fa-store" style={{marginRight:10,color:'#00b3b3'}}></i>
+                        Quản lý nhà cung cấp</h2>
                     <Editncc />
                     <form className='form-inline' style={{ marginBottom: '20px' }}>
                         <div className='form-group'>
@@ -81,6 +102,7 @@ class Lisstncc extends Component {
                                     type='text'
                                     className='form-control'
                                     name='search'
+                                    onChange={this.onChangeSearch}
                                     placeholder='Tìm kiếm Theo Tên'
                                 />
                                 <div className='input-group-append'>
@@ -99,17 +121,17 @@ class Lisstncc extends Component {
                                         <th className='cell100 column1' style={{ width: '5px' }}>
                                             STT
                                         </th>
-                                        <th className='cell100 column2' style={{ width: '140px' }}>
+                                        <th className='cell100 column2' style={{ width: '200px' }}>
                                             Mã nhà cung cấp
                                         </th>
-                                        <th className='cell100 column3' style={{ width: '15%' }}>
+                                        <th className='cell100 column3' style={{ width: '250px' }}>
                                             Tên nhà cung cấp
                                         </th>
-                                        <th className='cell100 column4' style={{ width: '15%' }}>
+                                        <th className='cell100 column4' style={{ width: '250px' }}>
                                             Địa chỉ
                                         </th>
-                                        <th className='cell100 column5'>Số điện thoại</th>
-                                        <th className='cell100 column8' style={{ textAlign: 'center' }}>
+                                        <th className='cell100 column5' style={{ width: '250px' }}>Số điện thoại</th>
+                                        <th className='cell100 column6' style={{ textAlign: 'center' }}>
                                             Hành Động
                                         </th>
                                     </tr>
@@ -142,4 +164,4 @@ const mapDispatchToProps = {
 };
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(Lisstncc);
+export default connect(mapStateToProps,mapDispatchToProps)(Listncc);

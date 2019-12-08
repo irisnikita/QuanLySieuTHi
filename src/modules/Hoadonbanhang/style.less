@@ -1,0 +1,75 @@
+.Logo-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid black;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+
+    .logo {
+        background: url(../../assets/image/logomarket.png) no-repeat;
+        width: 200px;
+        height: 80px;
+    }
+    .title-banner {
+        font-size: 20px;
+        font-weight: 500;
+        color: #8b8b8b;
+    }
+}
+.title-hoadon{
+    font-size: 30px;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+    color: #000000;
+}
+.wrapper-infor-customer{
+    display: flex;
+    
+    .infor-customer{
+        width: 70%;
+    }
+    .info-hoadon{
+        width: 30%;
+    }
+}
+.table-hoadon{
+    margin-top: 20px;
+    border-collapse: collapse;
+    tr,th,td,tfoot{
+        border: 1px solid rgb(151, 151, 151);
+    }
+    th{
+        font-weight: 500;
+        font-size: 15px;
+    }
+}
+.drop-down-tenmh{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top:25px;
+    width: 150px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid rgb(151, 151, 151);
+    span{
+        border-bottom: 1px solid rgb(151, 151, 151);
+        width: 100%;
+        padding: 0 0 0 5px;
+        cursor: pointer;
+    }
+    span:hover{
+        background: rgb(107, 107, 107);
+        color: #fff;
+    }
+    transition: all 200ms;
+    overflow: auto;
+}
+.fa-caret-down{
+    font-size: 20px;
+}
+.fa-caret-down:hover{
+    color: rgb(79, 170, 170)
+}

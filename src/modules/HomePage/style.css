@@ -1,0 +1,26 @@
+.card-content{
+    height: 100px;
+}
+.card-content:hover .fa-smile{
+    color: #4ea19d;
+}
+.fa-smile{
+    transition: all 200ms;
+}
+.card{
+    border-radius: 10px;
+    border-left: 5px solid #4ea19d;
+    color: #9c9c9c;
+}
+.card-content2{
+    height: 100px;
+}
+.card-content2:hover .fa-users{
+    color: rgb(86, 221, 169);
+}
+.hover2:hover .fa-cart-plus{
+    color: rgb(194, 60, 36);
+}
+.content-4:hover .fa-box-open{
+    color: #ad25ad;
+}

@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import numeral from 'numeral';
 import axios from 'axios';
 
 //action
@@ -213,7 +212,6 @@ class EditStaff extends Component {
     }
     render() {
         let { id, tennv, date, phone, address, idchange } = this.state;
-        console.log(idchange, id, tennv);
         return (
             <>
                 <div className='row modal' id='myModal' onClick={this.turnOffDropDown}>
@@ -260,10 +258,6 @@ class EditStaff extends Component {
                                         >
                                             <i className={idchange > 0 ? 'far fa-edit' : 'fas fa-plus'} style={{ margin: '0 5px' }}></i>
                                             {idchange > 0 ? 'Sửa' : 'Thêm'}
-                                        </button>
-                                        <button type='button' className='btn btn-info size-120  mr-20 width-100'>
-                                            <i className='fas fa-search' style={{ margin: '0 5px' }}></i>
-                                            Tìm
                                         </button>
                                     </div>
                                 </div>

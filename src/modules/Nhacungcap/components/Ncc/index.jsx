@@ -1,41 +1,40 @@
 //libaries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {axios} from 'axios'
+import axios from 'axios'
 
 //config
 import { appConfig } from '../../../../constant';
 
 //action
 import { onGetAllNcc, onDeleteNcc, onGetOneNcc } from '../../actions';
-
 class Ncc extends Component {
-    constructor(props) {
+    constructor(props){
         super(props);
-        this.state = {};
+        this.state={};
     }
 
-    onDelete = id => {
-        this.onDeleteRequest(id);
+
+    onDeleteNcc = (id) => {
+        this.onDeleteNccRequest(id);
     };
 
-    onUpdate = id => {
-        this.props.onGetOneStaff({
-            id,
+    onUpdateNcc = (id) => {
+        this.props.onGetOneNcc({
+            id:id,
         });
     };
 
-    onDeleteRequest = async id => {
-        const deleteStaff = await axios({
+    onDeleteNccRequest = async (id) => {
+        const deleteNcc = await axios({
             method: 'DELETE',
-            url: `${appConfig.API_URL}/staffs/${id}`,
+            url: `${appConfig.API_URL}/listncc/${id}`,
             data: {},
-        });
-
-        if (deleteStaff) {
-            this.props.onDeleteStaff({
-                id: id,
-            });
+        })
+        if(deleteNcc){
+            this.props.onDeleteNcc({
+                id: id
+            })
         }
     };
 
@@ -48,25 +47,25 @@ class Ncc extends Component {
                     <td className='cell100 column1' style={{ display: 'flex', width: '79px' }}>
                         {index}
                     </td>
-                    <td className='cell100 column2' style={{ width: '140px' }}>
+                    <td className='cell100 column2' style={{ width: '200px' }}>
                         {ncc.id}
                     </td>
-                    <td className='cell100 column3' style={{ width: '197px' }}>
+                    <td className='cell100 column3' style={{ width: '250px' }}>
                         {ncc.tenncc}
                     </td>
-                    <td className='cell100 column4' style={{ width: '197px' }}>
+                    <td className='cell100 column4' style={{ width: '250px' }}>
                         {ncc.diachi}
                     </td>
-                    <td className='cell100 column5'>{ncc.sdt}</td>
-                    <td className='cell100 column8' style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '261px' }}>
-                        <button type='button' className='btn btn-secondary mr-20' onClick={() => this.onDelete(ncc.id)}>
+                    <td className='cell100 column5' style={{ width: '250px' }}>{ncc.sdt}</td>
+                    <td className='cell100 column6' style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', width: '261px' }}>
+                        <button type='button' className='btn btn-secondary mr-20' onClick={() => this.onDeleteNcc(ncc.id)}>
                             <i className='far fa-trash-alt' style={{ margin: '0 5px' }}></i>
                             Xóa
                         </button>
                         <button
                             type='button'
                             className='btn btn-success mr-20'
-                            onClick={() => this.onUpdate(ncc.id)}
+                            onClick={() => this.onUpdateNcc(ncc.id)}
                             data-toggle='modal'
                             data-target='#myModal'
                         >

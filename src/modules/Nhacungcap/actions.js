@@ -10,7 +10,7 @@ export const types = {
 }
 
 export function onResetNcc(payload) {
-    return{type: types.RESET_Ncc,payload}
+    return{type: types.RESET_NCC,payload}
   }
 
 export function onGetAllNcc(payload) {
