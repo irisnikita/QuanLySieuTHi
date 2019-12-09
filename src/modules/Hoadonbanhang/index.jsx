@@ -7,16 +7,19 @@ import axios from 'axios';
 import numeral from 'numeral';
 import moment from 'moment-timezone';
 import _ from 'lodash';
+import Toast from 'light-toast';
 
 //components
 import Rowbill from './components/Rowbill';
 
 //actions
-import { onGetAllHanghoa } from '../HangHoa/actions';
-import { onAddRowBillHoaDon ,onAddSoHoaDon ,onAddHoaDon,onResetHoadon} from './actions';
+import { onGetAllHanghoa, onUpdateSoLuong } from '../HangHoa/actions';
+import { onAddRowBillHoaDon, onAddSoHoaDon, onAddHoaDon, onResetHoadon } from './actions';
+import { onAddCustomer, onGetAllCustomer } from '../Customer/actions';
 
 //assets
 import './style.css';
+import KhachHang from './components/KhachHang';
 
 class Hoadonbanhang extends Component {
     constructor(props) {
@@ -31,8 +34,16 @@ class Hoadonbanhang extends Component {
             dongia: 0,
             thanhtien: 0,
             tongcong: 0,
-			conhang: true,
-			sohoadon: 0,
+            conhang: true,
+            sohoadon: 0,
+            soluongtongcong: 0,
+            khachhang: {
+                id: 0,
+                tenkh: '',
+                diachi: '',
+                sdt: '',
+                iskhtt: false,
+            },
         };
     }
 
@@ -45,12 +56,13 @@ class Hoadonbanhang extends Component {
     };
 
     componentDidMount() {
-		this.getlistHanghoa();
-		this.getSohoadon();
+        this.getlistHanghoa();
+        this.getSohoadon();
+        this.getCustomers();
     }
 
     componentDidUpdate(prevProps, prevState) {
-        const { soluong, tongcong, id } = this.state;
+        const { soluong, tongcong, id, khachhang } = this.state;
         const { billselllist } = this.props;
         const { listhanghoa } = this.props;
         if (!_.isEqual(soluong, prevState.soluong)) {
@@ -71,27 +83,41 @@ class Hoadonbanhang extends Component {
         }
         if (!_.isEqual(billselllist, prevProps.billselllist)) {
             this.tongcongfunction();
+            this.soluongfunction();
+        }
+        if (!_.isEqual(tongcong, prevState.tongcong)) {
+            if (tongcong >= 2000000) {
+                this.setState({
+                    khachhang: {
+                        id: khachhang.id,
+                        tenkh: khachhang.tenkh,
+                        diachi: khachhang.diachi,
+                        sdt: khachhang.sdt,
+                        iskhtt: true,
+                    },
+                });
+            }
         }
     }
 
-	getSohoadon = async ()=>{
-		const getsohoadon = await axios({
-			url:`${appConfig.API_URL}/phieuhoadon`,
-			method:'GET',
-			data: {}
-		})
-		if(getsohoadon){
-			this.props.onAddSoHoaDon({
-				sohoadon: getsohoadon.data.length+1
-			})
-		}
-	}
+    getSohoadon = async () => {
+        const getsohoadon = await axios({
+            url: `${appConfig.API_URL}/phieuhoadon`,
+            method: 'GET',
+            data: {},
+        });
+        if (getsohoadon) {
+            this.props.onAddSoHoaDon({
+                sohoadon: getsohoadon.data.length + 1,
+            });
+        }
+    };
 
     onSelecthang = item => {
         this.setState({
             id: item.id,
             tenmh: item.tenmh,
-            loaimh: item.loaimh,
+            loaimh: item.loaimh !== null ? item.loaimh : 'Không có loại mặt hàng',
             dvt: item.dvt,
             dongia: item.dongia,
         });
@@ -145,9 +171,17 @@ class Hoadonbanhang extends Component {
         });
     };
 
+    soluongfunction = () => {
+        const { billselllist } = this.props;
+        billselllist.forEach(item => {
+            this.setState({
+                soluongtongcong: this.state.soluongtongcong + parseInt(item.soluong),
+            });
+        });
+    };
+
     addRowBill = () => {
-		const { id, tenmh, loaimh, dvt, soluong, dongia, thanhtien, } = this.state;
-		
+        const { id, tenmh, loaimh, dvt, soluong, dongia, thanhtien } = this.state;
 
         const billsell = {
             id,
@@ -176,40 +210,120 @@ class Hoadonbanhang extends Component {
 
     onsubmit = e => {
         if (e.charCode === 13) {
-            if (this.state.conhang) {
-                this.addRowBill();
-            }else {
-				alert('Sản phẩm đã hết hàng');
-			}
-        } 
+            if (this.state.id !== 0) {
+                if (this.state.conhang) {
+                    this.addRowBill();
+                } else {
+                    Toast.fail('Sản phẩm đã hết hàng', 1000);
+                }
+            }
+            else if(this.state.soluong <= 0 ){
+                Toast.fail('Số lượng tối thiểu lớn hơn 0',1000);
+            }
+            else{
+                Toast.fail('Bạn chưa chọn sản phẩm',1000);
+            }
+        }
     };
 
-	onPrint=()=>{
-		this.addHoaDonRequest();
-			alert('In hóa đơn thành công !');
-			this.props.onResetHoadon();
-			this.setState({
-				tongcong:0
-			})
-	}
+    onDeleteSoluong = async (id, hanghoa = {}) => {
+        const ondeletesoluong = await axios({
+            url: `${appConfig.API_URL}/listhanghoa/soluong/${id}`,
+            method: 'PUT',
+            data: { soluong: hanghoa.soluong },
+        });
+        if (ondeletesoluong.data === 'Update Success') {
+            this.props.onUpdateSoLuong({
+                hanghoa: hanghoa,
+            });
+        }
+    };
 
-	addHoaDonRequest= async ()=>{
-		const addhoadon = await axios({
-			url:`${appConfig.API_URL}/phieuhoadon/`,
-			method:'POST',
-			data: {
-				id:this.props.sohoadon,
-				ngaylap:moment.tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD'),
-				tongtgia:this.state.tongcong,
-				
-			}
-		})
-		if(addhoadon){
-			this.props.onAddHoaDon({
-				hoadon : addhoadon.data
-			})
-		}
-	}
+    onPrint = () => {
+        
+        Toast.success('In hóa đơn thành công !', 1000);
+        const { billselllist = [], listhanghoa = [] } = this.props;
+        for (let i = 0; i < listhanghoa.length; i++) {
+            for (let j = 0; j < billselllist.length; j++) {
+                if (listhanghoa[i].id === billselllist[j].id) {
+                    let hanghoa = {
+                        id: parseInt(listhanghoa[i].id),
+                        soluong: -billselllist[j].soluong,
+                    };
+                    let id = listhanghoa[i].id;
+                    this.onDeleteSoluong(id, hanghoa);
+                }
+            }
+        }
+
+        this.addHoaDonRequest();
+
+        if (this.state.tongcong >= 2000000) {
+            this.addKhachHangTT();
+        }
+        this.props.onResetHoadon();
+        this.setState({
+            tongcong: 0,
+            soluongtongcong: 0,
+            khachhang: [],
+        });
+    };
+
+    addHoaDonRequest = async () => {
+        const addhoadon = await axios({
+            url: `${appConfig.API_URL}/phieuhoadon/`,
+            method: 'POST',
+            data: {
+                id: this.props.sohoadon,
+                ngaylap: moment.tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD'),
+                tongtgia: this.state.tongcong,
+                sohang: this.state.soluongtongcong,
+            },
+        });
+        if (addhoadon) {
+            if (addhoadon.data.code !== 'ER_DUP_ENTRY') {
+                this.props.onAddHoaDon({
+                    hoadon: addhoadon.data,
+                });
+            }
+        }
+    };
+
+    onSaveKhachHang = data => {
+        this.setState({
+            khachhang: data,
+        });
+    };
+
+    addKhachHangTT = async () => {
+        const insertkhachhang = await axios({
+            method: 'POST',
+            url: `${appConfig.API_URL}/customers/`,
+            data: this.state.khachhang,
+        });
+        if (insertkhachhang) {
+            if (insertkhachhang.data.code !== 'ER_DUP_ENTRY') {
+                this.props.onAddCustomer({
+                    Customer: insertkhachhang.data,
+                });
+                Toast.success('Thêm Khách hàng thân thiết thành công !', 1000);
+            }
+        }
+    };
+
+    getCustomers = async () => {
+        const getcustomers = await axios({
+            method: 'GET',
+            url: `${appConfig.API_URL}/customers/`,
+            data: {},
+        });
+
+        if (getcustomers) {
+            this.props.onGetAllCustomer({
+                Customers: getcustomers.data,
+            });
+        }
+    };
 
     getlistHanghoa = async () => {
         const getlistHanghoa = await axios({
@@ -227,11 +341,12 @@ class Hoadonbanhang extends Component {
 
     render() {
         const { isShowDropDown } = this.state;
-		const { id, tenmh, loaimh, dvt, dongia, soluong, thanhtien, tongcong, conhang} = this.state;
-		const {sohoadon}=this.props;
+        const { id, tenmh, loaimh, dvt, dongia, soluong, thanhtien, tongcong, conhang } = this.state;
+        const { sohoadon } = this.props;
         const num_thanhtien = numeral(thanhtien).format('0,0.0');
         const num_dongia = numeral(dongia).format('0,0.0');
         const num_tongcong = numeral(tongcong).format('0,0.0');
+        const { iskhtt } = this.state.khachhang;
         return (
             <>
                 <ReactToPrint
@@ -255,43 +370,34 @@ class Hoadonbanhang extends Component {
                     </div>
                     <div className='title-hoadon'>HÓA ĐƠN BÁN HÀNG</div>
                     <form className='wrapper-infor-customer'>
-                        <div className='infor-customer'>
-                            <span style={{ fontSize: '20px', fontWeight: '500', textDecoration: 'underline' }}>Thông tin khách hàng:</span>
-                            <div style={{ margin: '10px 0px 0px 5px', display: 'flex' }}>
-                                <div style={{ display: 'flex' }}>
-                                    <span style={{ fontWeight: 'bold' }}>Mã số khách hàng:</span>
-                                    <input type='number' style={{ borderBottom: '1px solid black', width: 100, marginLeft: 5 }} />
-                                </div>
-                                <div style={{ display: 'flex' }}>
-                                    <span style={{ fontWeight: 'bold' }}>Địa chỉ:</span>
-                                    <input type='text' style={{ borderBottom: '1px solid black', marginLeft: 5, width: 400 }} />
-                                </div>
-                                <div></div>
-                            </div>
-                            <div style={{ margin: '10px 0px 0px 5px', display: 'flex' }}>
-                                <div style={{ display: 'flex' }}>
-                                    <span style={{ fontWeight: 'bold' }}>Tên khách hàng:</span>
-                                    <input type='text' style={{ borderBottom: '1px solid black', width: 300, marginLeft: 5 }} />
-                                </div>
-                                <div style={{ display: 'flex' }}>
-                                    <span style={{ fontWeight: 'bold' }}>Số điện thoại:</span>
-                                    <input type='text' style={{ borderBottom: '1px solid black', marginLeft: 5 }} />
-                                </div>
-                            </div>
-                            <div className='hoten-sdt'></div>
+                        <KhachHang onSaveKhachHang={this.onSaveKhachHang} Customers={this.props.Customers} />
+                        <div className='iskh-tt'>
+                            <i
+                                className='fa fa-address-card'
+                                style={{ color: `${iskhtt ? '#29e5d7' : '#949494'}`, marginRight: '10px' }}
+                                aria-hidden='true'
+                            ></i>
+                            <span style={{ color: `${iskhtt ? '#29e5d7' : '#949494'}`, fontWeight: `${iskhtt ? 'bold' : 'normal'}` }}>{`${
+                                iskhtt ? 'Khách hàng thân thiết' : 'Khách hàng bình thường'
+                            }`}</span>
                         </div>
                         <div className='info-hoadon'>
                             <span style={{ fontSize: '20px', fontWeight: '500', textDecoration: 'underline' }}>Thông tin hóa đơn:</span>
                             <div style={{ margin: '10px 0px 0px 5px' }}>
                                 <div style={{ display: 'flex' }}>
                                     <span style={{ fontWeight: 'bold' }}>Số:</span>
-                                    <input type='number' value={sohoadon} readOnly style={{ borderBottom: '1px solid black', width: 100, marginLeft: 5 }} />
+                                    <input
+                                        type='number'
+                                        value={sohoadon}
+                                        readOnly
+                                        style={{ borderBottom: '1px solid black', width: 100, marginLeft: 5 }}
+                                    />
                                 </div>
                                 <div style={{ display: 'flex', marginTop: '10px' }}>
                                     <span style={{ fontWeight: 'bold' }}>Ngày:</span>
                                     <input
-										type='text'
-										readOnly
+                                        type='text'
+                                        readOnly
                                         value={moment.tz('Asia/Ho_Chi_Minh').format('YYYY-MM-DD')}
                                         style={{ borderBottom: '1px solid black', marginLeft: 5, width: 200 }}
                                     />
@@ -384,15 +490,19 @@ function mapStateToProps(state) {
         listhanghoa: state.listHangHoa.listhanghoaReducer.listhanghoa,
         billselllist: state.Billsell.billsellReducer.list_row_bill,
         sohoadon: state.Billsell.billsellReducer.sohoadon,
+        Customers: state.Customers.CustomersReducer.Customers,
     };
 }
 
 const mapDispatchToProps = {
     onGetAllHanghoa,
-	onAddRowBillHoaDon,
-	onAddSoHoaDon,
-	onAddHoaDon,
-	onResetHoadon
+    onAddRowBillHoaDon,
+    onAddSoHoaDon,
+    onAddHoaDon,
+    onResetHoadon,
+    onAddCustomer,
+    onGetAllCustomer,
+    onUpdateSoLuong,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Hoadonbanhang);

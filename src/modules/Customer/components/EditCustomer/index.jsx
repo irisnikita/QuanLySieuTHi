@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import Toast from 'light-toast';
 
 //action
 import { onAddCustomer, onUpdateCustomer, onResetCustomer } from '../../actions';
@@ -52,9 +53,11 @@ class EditCustomer extends Component {
             alert('Bạn nhập chưa chính xác');
         } else {
             if (this.state.idchange === 0) {
+                Toast.success('Thêm khách hàng thành công !',1000)
                 this.addCustomerRequest();
             }
             if (this.state.idchange !== 0) {
+                Toast.success('Cập nhật khách hàng thành công !',1000)
                 this.updateCustomerRequest();
             }
         }

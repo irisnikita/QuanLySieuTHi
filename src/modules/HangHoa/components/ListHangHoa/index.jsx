@@ -12,7 +12,6 @@ import Hanghoa from '../HangHoa';
 
 //assets
 import './style.css';
-import { thisExpression } from '@babel/types';
 
 
 class ListHangHoa extends Component {

@@ -21,8 +21,8 @@ module.exports = function(app,conn){
 	//Insert
 	app.post('/phieuhoadon/',(req,res)=>{
 		let sta = req.body;
-		var query1= 'INSERT INTO hoadon (id,ngaylap,tongtgia) VALUES (?)';
-		conn.query(query1,[[sta.id,sta.ngaylap,sta.tongtgia]],(err,data,fields)=>{
+		var query1= 'INSERT INTO hoadon (id,ngaylap,tongtgia,sohang) VALUES (?)';
+		conn.query(query1,[[sta.id,sta.ngaylap,sta.tongtgia,sta.sohang]],(err,data,fields)=>{
 			if(!err){
 				res.send(sta);
 			}

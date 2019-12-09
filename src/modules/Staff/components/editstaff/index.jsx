@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import axios from 'axios';
+import Toast from 'light-toast';
 
 //action
 import { onAddStaff, onUpdateStaff ,onResetStaff} from '../liststaff/actions';
@@ -58,9 +59,11 @@ class EditStaff extends Component {
             alert('Bạn nhập chưa chính xác');
         } else {
             if (this.state.idchange === 0) {
+                Toast.success('Thêm nhân viên thành công !',1000);
                 this.addStaffRequest();
             }
             if (this.state.idchange !== 0) {
+                Toast.success('Cập nhật thành công !',1000)
                 this.updateStaffRequest();
             }
         }

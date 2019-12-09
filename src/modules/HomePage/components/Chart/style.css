@@ -1,0 +1,14 @@
+.mixed-chart{
+    margin-left: 15px;
+    border: 1px solid #a1a1a1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #bebebe;
+    margin-bottom: 10px;
+    padding: 10px 5px;
+}
+.pine-chart{
+    border: 1px solid #a1a1a1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #bebebe;
+    margin-bottom: 10px;
+}

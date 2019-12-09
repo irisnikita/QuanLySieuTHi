@@ -74,3 +74,8 @@
 .fa-caret-down:hover {
   color: #4faaaa;
 }
+.iskh-tt {
+  position: absolute;
+  width: 220px;
+  right: 500px;
+}

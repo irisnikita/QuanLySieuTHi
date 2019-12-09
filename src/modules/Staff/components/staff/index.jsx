@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 import numeral from 'numeral';
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 //config
 import { appConfig } from '../../../../constant';
@@ -18,7 +20,23 @@ class Staff extends Component {
     }
 
     onDelete = id => {
-        this.onDeleteRequest(id);
+        confirmAlert({
+            title: 'Xóa nhân viên ',
+            message: `Bạn có muốn xóa nhân viên ${this.props.staff.tennv}`,
+            buttons: [
+              {
+                label: 'Có',
+                onClick: () => {
+                    
+                    this.onDeleteRequest(id);
+                }
+              },
+              {
+                label: 'Không',
+                onClick: () => null
+              }
+            ]
+          })
     };
 
     onUpdate = id => {

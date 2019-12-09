@@ -13,15 +13,16 @@ import { appConfig } from '../../constant';
 
 //components
 import ClassChart from './components/Chart';
+import ChartDoanhThu from './components/Chart/components/ChartDoanhThu';
+
+//action
+import { onLoginUser } from '../Layouts/containers/Login/actions';
 import { onGetAllCustomer } from '../Customer/actions';
 import { onGetAllHanghoa } from '../HangHoa/actions';
 import { onGetAllNcc } from '../Nhacungcap/actions';
 import { onGetAllStaff } from '../Staff/components/liststaff/actions';
 import { onGetAllBill } from '../PhieuMuaHang/actions';
-
-//action
-import { onLoginUser } from '../Layouts/containers/Login/actions';
-import { Item } from 'rc-menu';
+import { onGetAllHoadon } from '../Hoadonbanhang/actions';
 
 class Homepage extends Component {
     constructor(props) {
@@ -30,6 +31,9 @@ class Homepage extends Component {
             userlogin: {},
             isShow: false,
             listsolieu: [],
+            listsolieuhoadon: [],
+            sotienmua: 0,
+            sotienban: 0,
         };
     }
 
@@ -40,20 +44,55 @@ class Homepage extends Component {
         this.getStaffs();
         this.getAllBill();
         this.getMonth();
+        this.setsotien()
+        this.getlistHoaDon();
         this.setState({
             isShow: true,
         });
-
     }
 
     componentDidUpdate(prevProps) {
-      const {Bill = []} = this.props;
+        const { Bill = [], listhoadon } = this.props;
 
-      if (!_.isEqual(Bill, prevProps.Bill)) {
-        this.getMonth();
-      }
+        if (!_.isEqual(Bill, prevProps.Bill)) {
+            this.getMonth();
+            let sotienmua = 0;
+            Bill.forEach(item => {
+                sotienmua += item.tongcong;
+            });
+            this.setState({
+                sotienmua,
+            });
+        }
+        if (!_.isEqual(listhoadon, prevProps.listhoadon)) {
+            this.getMonth();
+            let sotienban = 0;
+            listhoadon.forEach(item => {
+                sotienban += item.tongtgia;
+            });
+            this.setState({
+                sotienban,
+            });
+        }
     }
 
+    setsotien = () => {
+        const { Bill = [], listhoadon } = this.props;
+        let sotienmua = 0;
+        Bill.forEach(item => {
+            sotienmua += item.tongcong;
+        });
+        this.setState({
+            sotienmua,
+        });
+        let sotienban = 0;
+        listhoadon.forEach(item => {
+            sotienban += item.tongtgia;
+        });
+        this.setState({
+            sotienban,
+        });
+    };
 
     componentWillUnmount() {
         this.setState({
@@ -118,6 +157,20 @@ class Homepage extends Component {
         }
     };
 
+    getlistHoaDon = async () => {
+        const getlisthoadon = await axios({
+            method: 'GET',
+            url: `${appConfig.API_URL}/phieuhoadon/`,
+            data: {},
+        });
+
+        if (getlisthoadon) {
+            this.props.onGetAllHoadon({
+                listhoadon: getlisthoadon.data,
+            });
+        }
+    };
+
     getCustomers = async () => {
         const getcustomers = await axios({
             method: 'GET',
@@ -133,90 +186,163 @@ class Homepage extends Component {
     };
 
     getMonth = () => {
-        const { Bill = [] } = this.props;
-        var tongcong = 0;
+        const { Bill = [], listhoadon = [] } = this.props;
+
         let listData = [
-          {
-            month :1,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :2,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :3,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :4,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :5,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :6,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :7,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :8,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :9,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :10,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :11,
-            tongcong: 0,
-            sohang: 0
-          },
-          {
-            month :12,
-            tongcong: 0,
-            sohang: 0
-          },
+            {
+                month: 1,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 2,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 3,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 4,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 5,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 6,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 7,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 8,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 9,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 10,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 11,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 12,
+                tongcong: 0,
+                sohang: 0,
+            },
         ];
-        
-        listData.map((data,index)=>{
-          Bill.map((billitem)=>{
-            const {ngay =''}=billitem
-            const month = moment(ngay,'YYYY-MM-DD').format('MM');
-            if(data.month===parseInt(month)){
-              listData[index].sohang+=billitem.sohang;
-              listData[index].tongcong+=billitem.tongcong;
-            }
-          })
-        })
+        listData.forEach((data, index) => {
+            Bill.forEach(billitem => {
+                const { ngay = '' } = billitem;
+                const month = moment(ngay, 'YYYY-MM-DD').format('MM');
+                if (data.month === parseInt(month)) {
+                    listData[index].sohang += billitem.sohang;
+                    listData[index].tongcong += billitem.tongcong;
+                }
+            });
+        });
+
+        let listData2 = [
+            {
+                month: 1,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 2,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 3,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 4,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 5,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 6,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 7,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 8,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 9,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 10,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 11,
+                tongcong: 0,
+                sohang: 0,
+            },
+            {
+                month: 12,
+                tongcong: 0,
+                sohang: 0,
+            },
+        ];
+
+        listData2.forEach((data, index) => {
+            listhoadon.forEach(hoadonitem => {
+                const { ngaylap = '' } = hoadonitem;
+                const month = moment(ngaylap, 'YYYY-MM-DD').format('MM');
+                if (data.month === parseInt(month)) {
+                    listData2[index].sohang += hoadonitem.sohang;
+                    listData2[index].tongcong += hoadonitem.tongtgia;
+                }
+            });
+        });
 
         this.setState({
-          listsolieu: listData
+            listsolieu: listData,
+            listsolieuhoadon: listData2,
         });
     };
 
     render() {
-        let { userlogin = {} } = this.props;
-        const { isShow, listsolieu } = this.state;
+        const { isShow, listsolieu, listsolieuhoadon, sotienban, sotienmua } = this.state;
         const { Customers, listncc, staffs, listhanghoa } = this.props;
         return (
             <>
@@ -333,7 +459,12 @@ class Homepage extends Component {
                         </div>
                     </Link>
                 </div>
-                <ClassChart listsolieu={listsolieu} />
+
+                <div className='row'>
+                    <ClassChart listsolieu={listsolieu} listsolieuhoadon={listsolieuhoadon} />
+
+                    <ChartDoanhThu sotienban={sotienban} sotienmua={sotienmua} />
+                </div>
             </>
         );
     }
@@ -347,6 +478,7 @@ const mapStateToProps = state => {
         staffs: state.liststaff.staffsReducer.staffs,
         listhanghoa: state.listHangHoa.listhanghoaReducer.listhanghoa,
         Bill: state.RowBillBuy.billBuyReducer.Bill,
+        listhoadon: state.Billsell.billsellReducer.listhoadon,
     };
 };
 
@@ -357,6 +489,7 @@ const mapDispatchToProps = {
     onGetAllNcc,
     onGetAllStaff,
     onGetAllBill,
+    onGetAllHoadon,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Homepage);

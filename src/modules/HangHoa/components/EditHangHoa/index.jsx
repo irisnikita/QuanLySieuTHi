@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import Toast from 'light-toast';
 
 //action
 import { onAddHanghoa, onUpdateHanghoa, onResetHanghoa } from '../../actions';
@@ -40,9 +41,11 @@ class EditHanghoa extends Component {
     onSubmit = e => {
         e.preventDefault();
         if (this.state.idchange === 0) {
+            Toast.success('Thêm Hàng hóa thành công !',1000)
             this.addHanghoaRequest();
         }
         if (this.state.idchange !== 0) {
+            Toast.success('Sửa hàng hóa thành công !',1000)
             this.updateHanghoaRequest();
         }
     };

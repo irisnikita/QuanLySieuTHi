@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
+import Toast from 'light-toast';
 
 //action
 import { onAddNcc, onUpdateNcc, onResetNcc } from '../../actions';
@@ -49,12 +50,15 @@ class Editncc extends Component {
     onSubmit = e => {
         e.preventDefault();
         if (isphone !== true) {
-            alert('Bạn nhập chưa chính xác');
+            Toast.fail('Bạn nhập chưa chính xác !',1000)
         } else {
             if (this.state.idchange === 0) {
                 this.addNccRequest();
+                Toast.success('Thêm thành công...',1000)
+
             }
             if (this.state.idchange !== 0) {
+                Toast.success('Sửa thành công...',1000)
                 this.updateNccRequest();
             }
         }

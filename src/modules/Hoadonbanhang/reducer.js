@@ -36,6 +36,10 @@ const billsellReducer = (state=initialState,action)=>{
 		return produce(state,(draftState)=>{
 			draftState.list_row_bill=[];
 		});
+	case types.GET_ALL_HOADON:
+		return produce(state,draftState=>{
+			draftState.listhoadon=action.payload.listhoadon;
+		});
 	default:
 		return {...state};
 	}

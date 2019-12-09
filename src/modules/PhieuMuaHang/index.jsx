@@ -19,7 +19,6 @@ import './style.css';
 import ListBill from './components/listBill';
 import AddRowBill from './components/addBill';
 
-var tongcong = 0;
 var sohang = 0;
 class Phieumuahang extends Component {
     constructor(props) {
@@ -89,7 +88,6 @@ class Phieumuahang extends Component {
     };
 
     addbillRequest = async () => {
-        const { sophieumua = 0, ngay = '' } = this.state;
         const { tongcong } = this.props;
         const { listRowBill,sohoadon } = this.props;
         listRowBill.forEach(item => {

@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios'
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 //config
 import { appConfig } from '../../../../constant';
@@ -16,7 +18,23 @@ class Customer extends Component {
 
 
     onDeleteCustomer = (id) => {
-        this.onDeleteCustomerRequest(id);
+        confirmAlert({
+            title: 'Xóa khách hàng thân thiết',
+            message: `Bạn có muốn xóa ${this.props.customer.tenkh}` ,
+            buttons: [
+              {
+                label: 'Có',
+                onClick: () => {
+                    
+                     this.onDeleteCustomerRequest(id);
+                }
+              },
+              {
+                label: 'Không',
+                onClick: () => null
+              }
+            ]
+          })
     };
 
     onUpdateCustomer = (id) => {

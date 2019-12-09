@@ -2,7 +2,8 @@ export const types = {
 	ADD_ROW_BILL_HOADON :'ADD_ROW_BILL_HOADON',
 	ADD_SOHOADON: 'ADD_SOHOADON',
 	ADD_HOADON: 'ADD_HOADON',
-	RESET_HOADON: 'RESET_HOADON'
+	RESET_HOADON: 'RESET_HOADON',
+	GET_ALL_HOADON: 'GET_ALL_HOADON'
 
 };
 
@@ -17,4 +18,7 @@ export function onAddHoaDon (payload){
 }
 export function onResetHoadon (payload){
 	return{type:types.RESET_HOADON,payload};
+}
+export function onGetAllHoadon (payload){
+	return{type:types.GET_ALL_HOADON,payload};
 }

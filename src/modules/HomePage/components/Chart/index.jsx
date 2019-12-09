@@ -5,14 +5,19 @@ import _ from 'lodash';
 //components
 import ChartDoanhThu from './components/ChartDoanhThu';
 
+//assets
+import './style.css';
+
 class ClassChart extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			options: {
-				chart: {
-					id: 'basic-bar',
-					
+				yaxis: {
+					title: {
+						text: 'Số lượng',
+					},
+					min: 0,
 				},
 				xaxis: {
 					categories: [
@@ -35,7 +40,7 @@ class ClassChart extends Component {
 			series: [
 				{
 					name: 'Hàng đã mua',
-					data: [0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0],
+					data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 				},
 				{
 					name: 'Hàng đã bán',
@@ -45,54 +50,61 @@ class ClassChart extends Component {
 		};
 	}
 
+	componentDidUpdate(prevProps) {
+		const { listsolieu = [] } = this.props;
+		const { listsolieuhoadon = [] } = this.props;
 
-	componentDidUpdate(prevProps){
-		const {listsolieu=[]}=this.props;
-		if(!_.isEqual(listsolieu,prevProps.listsolieu)){
-			const sortlistsolieu = _.sortBy(listsolieu,'month');
-			console.log('sortlistsolieu',sortlistsolieu);
-			let series=[];
-			let data =[0, 0, 0,0, 0, 0, 0, 0,0,0,0,0];
-			sortlistsolieu.map((item,index)=>{
-				data[index]=item.sohang;
+		if (!_.isEqual(listsolieu, prevProps.listsolieu) || !_.isEqual(listsolieuhoadon, prevProps.listsolieuhoadon)) {
+			const sortlistsolieu = _.sortBy(listsolieu, 'month');
+			const sortlistsolieuhoadon = _.sortBy(listsolieuhoadon, 'month');
+
+			let series = [];
+			let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+			let data2 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+			sortlistsolieu.forEach((item, index) => {
+				data[index] = item.sohang;
 			});
-			series=[
+
+			sortlistsolieuhoadon.forEach((item, index) => {
+				data2[index] = item.sohang;
+			});
+
+			series = [
 				{
 					name: 'Hàng đã mua',
+					type: 'area',
 					data: data,
 				},
 				{
 					name: 'Hàng đã bán',
-					data: [2000, 1000, 3000, 1500, 2660, 2330,2567,233,4462,3445],
+					type: 'area',
+					data: data2,
 				},
 			];
+
 			this.setState({
-				series :series
+				series: series,
 			});
 		}
 	}
 	render() {
 		return (
 			<>
-				<div className='app'>
-					<div className='row'>
-						<div className='mixed-chart'>
-							<div
-								style={{
-									display: 'flex',
-									alignItems: 'center',
-									justifyContent: 'center',
-									color: '#37ccb1',
-									fontSize: '20px',
-									fontWeight: '600',
-								}}
-							>
-                                Báo cáo số liệu
-							</div>
-							<Chart options={this.state.options} series={this.state.series} type='area' width='700' height='300' />
-						</div>
-						<ChartDoanhThu />
+				<div className='mixed-chart'>
+					<div
+						style={{
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							color: '#37ccb1',
+							fontSize: '20px',
+							fontWeight: '600',
+						}}
+					>
+                        Báo cáo số liệu
 					</div>
+					<Chart options={this.state.options} series={this.state.series} type="area" width='700' height='300' />
 				</div>
 			</>
 		);

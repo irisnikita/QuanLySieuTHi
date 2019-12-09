@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios'
 import numeral from 'numeral';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 //config
 import { appConfig } from '../../../../constant';
@@ -17,7 +19,23 @@ class Hanghoa extends Component {
 
 
     onDeleteHanghoa = (id) => {
-        this.onDeleteHanghoaRequest(id);
+        confirmAlert({
+            title: 'Xóa hàng hóa',
+            message: ` Bạn có muốn xóa ${this.props.hanghoa.tenmh} `,
+            buttons: [
+              {
+                label: 'Có',
+                onClick: () => {
+                    this.onDeleteHanghoaRequest(id);
+                }
+              },
+              {
+                label: 'Không',
+                onClick: () => null
+              }
+            ]
+          })
+        
     };
 
     onUpdateHanghoa = (id) => {
