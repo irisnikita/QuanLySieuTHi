@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import 'antd/dist/antd.css';
 
 // Store
 import store from './store';

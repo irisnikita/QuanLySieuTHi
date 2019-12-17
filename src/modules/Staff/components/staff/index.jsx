@@ -6,6 +6,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import { confirmAlert } from 'react-confirm-alert'; 
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import Toast from 'light-toast';
 
 //config
 import { appConfig } from '../../../../constant';
@@ -46,6 +47,9 @@ class Staff extends Component {
     };
 
     onDeleteRequest = async id => {
+        Toast.loading('Đang xóa ...',()=>{
+            Toast.success('Xóa thành công',1000)
+        })
         const deleteStaff = await axios({
             method: 'DELETE',
             url: `${appConfig.API_URL}/staffs/${id}`,
@@ -53,6 +57,7 @@ class Staff extends Component {
         });
 
         if (deleteStaff) {
+            Toast.hide()
             this.props.onDeleteStaff({
                 id: id,
             });

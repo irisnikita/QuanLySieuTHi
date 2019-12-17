@@ -2,11 +2,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios'
-import { confirmAlert } from 'react-confirm-alert'; // Import
-import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
+import { confirmAlert } from 'react-confirm-alert';
+import Toast from 'light-toast'
 
 //config
 import { appConfig } from '../../../../constant';
+
+//css
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 //action
 import { onGetAllCustomer, onDeleteCustomer, onGetOneCustomer } from '../../actions';
@@ -44,12 +47,16 @@ class Customer extends Component {
     };
 
     onDeleteCustomerRequest = async (id) => {
+        Toast.loading("Đang xóa ...",(id)=>{
+            Toast.success("Xóa thành công !",1000)
+        })
         const deleteCustomer = await axios({
             method: 'DELETE',
             url: `${appConfig.API_URL}/customers/${id}`,
             data: {},
         })
         if(deleteCustomer){
+            Toast.hide();
             this.props.onDeleteCustomer({
                 id: id
             })

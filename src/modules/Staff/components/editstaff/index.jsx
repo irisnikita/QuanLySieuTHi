@@ -54,9 +54,10 @@ class EditStaff extends Component {
     componentDidMount() {}
 
     onSubmit = e => {
+        const {id,phone,tennv,address,date,machucvu}=this.state;
         e.preventDefault();
-        if (isphone !== true) {
-            alert('Bạn nhập chưa chính xác');
+        if (isphone !== true ) {
+            alert('Bạn nhập chưa đủ thông tin');
         } else {
             if (this.state.idchange === 0) {
                 Toast.success('Thêm nhân viên thành công !',1000);
@@ -217,7 +218,7 @@ class EditStaff extends Component {
         let { id, tennv, date, phone, address, idchange } = this.state;
         return (
             <>
-                <div className='row modal' id='myModal' onClick={this.turnOffDropDown}>
+                <div className='row modal' id='myModal' onClick={this.turnOffDropDown} >
                     <div className='col-9 col-sm-9 marign-modal-1' style={{ background: '#fff' }}>
                         <h1 style={{ marginBottom: 20, color: `${idchange === 0 ? '#00cccc' : '#e62e00'}` }}>
                             {idchange === 0 ? 'Thêm nhân viên' : 'Chỉnh sửa nhân viên'}

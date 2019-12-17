@@ -8,6 +8,8 @@ import numeral from 'numeral';
 import moment from 'moment-timezone';
 import _ from 'lodash';
 import Toast from 'light-toast';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 //components
 import Rowbill from './components/Rowbill';
@@ -240,8 +242,6 @@ class Hoadonbanhang extends Component {
     };
 
     onPrint = () => {
-        
-        Toast.success('In hóa đơn thành công !', 1000);
         const { billselllist = [], listhanghoa = [] } = this.props;
         for (let i = 0; i < listhanghoa.length; i++) {
             for (let j = 0; j < billselllist.length; j++) {
@@ -255,8 +255,25 @@ class Hoadonbanhang extends Component {
                 }
             }
         }
-
-        this.addHoaDonRequest();
+        if(this.state.tongcong>0 && this.state.khachhang.id !== 0){
+            this.getlistHanghoa();
+            this.getSohoadon();
+            this.addHoaDonRequest();
+            this.getCustomers();
+        }
+        else{
+            confirmAlert({
+                title: 'Thêm thất bại',
+                message: 'Thêm thất bại xin vui lòng thử lại',
+                buttons: [
+                  {
+                    label: 'Ok',
+                    onClick: () => null
+                  }
+                ]
+              })
+        }
+        
 
         if (this.state.tongcong >= 2000000) {
             this.addKhachHangTT();
@@ -270,6 +287,10 @@ class Hoadonbanhang extends Component {
     };
 
     addHoaDonRequest = async () => {
+        Toast.loading('Đang thêm ...',()=>{
+
+            Toast.success('Thêm thành công !',1000)
+        });
         const addhoadon = await axios({
             url: `${appConfig.API_URL}/phieuhoadon/`,
             method: 'POST',
@@ -282,6 +303,7 @@ class Hoadonbanhang extends Component {
         });
         if (addhoadon) {
             if (addhoadon.data.code !== 'ER_DUP_ENTRY') {
+                Toast.hide();
                 this.props.onAddHoaDon({
                     hoadon: addhoadon.data,
                 });
@@ -303,10 +325,10 @@ class Hoadonbanhang extends Component {
         });
         if (insertkhachhang) {
             if (insertkhachhang.data.code !== 'ER_DUP_ENTRY') {
+                
                 this.props.onAddCustomer({
                     Customer: insertkhachhang.data,
                 });
-                Toast.success('Thêm Khách hàng thân thiết thành công !', 1000);
             }
         }
     };

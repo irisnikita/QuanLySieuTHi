@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css' // Import css
 
 //asset
 import '../Header/styles.css';
@@ -11,11 +13,27 @@ import { onLoginUser, onLogoutUser, onToggleBar } from '../Login/actions';
 
 class Header extends Component {
     onLogOut = () => {
+        confirmAlert({
+            title: 'Đăng xuất',
+            message: 'Bạn Có chắc muốn đăng xuất !',
+            buttons: [
+              {
+                label: 'Có',
+                onClick: () => {
+                    
         localStorage.removeItem('userlogin');
         this.props.onLogoutUser({
             isAuth: false,
             user: {},
         });
+                }
+              },
+              {
+                label: 'Không',
+                onClick: () => null
+              }
+            ]
+          })
     };
 
     ontogglebar=()=>{

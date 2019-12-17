@@ -164,7 +164,7 @@ class EditHanghoa extends Component {
                 <div className='row modal' id='myModal'>
                     <div className='col-9 col-sm-9 marign-modal-1' style={{ background: '#fff' }}>
                         <h1 style={{ marginBottom: 20, color: `${idchange === 0 ? '#00cccc' : '#e62e00'}` }}>
-                            {idchange === 0 ? 'Thêm nhà cung cấp' : 'Chỉnh sửa nhà cung cấp'}
+                            {idchange === 0 ? 'Thêm hàng hóa' : 'Chỉnh sửa hàng hóa'}
                         </h1>
                         <form onSubmit={this.onSubmit}>
                             <div className='form-row'>
